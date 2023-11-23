@@ -1,0 +1,31 @@
+body > div {
+    visibility: hidden;
+    position: absolute;
+}
+main{
+    display: flex;
+    flex-wrap: wrap;
+    min-height: 110vh;
+    width: 100vw;
+}
+.card{
+    margin: 2% 3.5%;
+    display: flex;
+    flex-direction: column;
+    width: 17vw;
+    height: 25vw;
+}
+
+.containerImg{
+width: 100%;
+height: 90%;
+}
+
+.containerImg__img{
+    width: 100%;
+    height: 100%;
+}
+
+.tituloPelicula{
+    text-align: center;
+}

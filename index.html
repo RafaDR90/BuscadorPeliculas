@@ -3,15 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="peliculasController.js"></script>
-    <script src="peliculasModel.js"></script>
+    <script src="./peliculasController.js"></script>
+    <script src="./peliculasModel.js"></script>
+    <script src="./peliculasView.js"></script>
+    <link rel="stylesheet" href="./styles/style.css">
     <title>Buscador de peliculas</title>
 </head>
 <body>
-    <header></header>
+    <header>
+        <nav>
+            <label for="buscador">Buscar </label>
+            <input type="text" id="buscador">
+        </nav>
+    </header>
+    <div class="card" id="originalCard">
+        <div class="containerImg"><img class="containerImg__img" src="https://m.media-amazon.com/images/M/MV5BNTc4MTc3NTQ5OF5BMl5BanBnXkFtZTcwOTg0NjI4NA@@._V1_SX300.jpg"></div>
+        <h3 class="tituloPelicula">star wars</h3>
+    </div>
     <main>
 
     </main>
+    
     <footer></footer>
 </body>
 </html>
