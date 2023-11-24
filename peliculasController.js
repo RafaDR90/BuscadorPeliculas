@@ -1,4 +1,5 @@
 window.onload=()=>{
+    var containerInfo=document.getElementById('containerInfo');
     var card=document.getElementById('originalCard');
     var buscar = document.getElementById('buscador');
     var main=document.querySelector('main')
@@ -11,7 +12,7 @@ window.onload=()=>{
                 datos=extraerPeliculas(datos,valorInput,1)
                 .then(data => {
                     datos=data;
-                    imprimePeliculas(datos,card,main)
+                    imprimePeliculas(datos,card,main,containerInfo)
                     
                   })
                   .catch(error => {
