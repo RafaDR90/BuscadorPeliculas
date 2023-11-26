@@ -1,18 +1,52 @@
+var arrayStats = {
+    'rating': [], 
+    'id': [],
+    'votes': [],
+    'portada':[]
+  };
 function imprimePeliculas(datos,card,main,cardInfo){
+    var funciona;
+    arrayStats = {
+        'rating': [], 
+        'id': [],
+        'votes': [],
+        'portada':[]
+      };
+    
+    var spinner = document.getElementById('spinner');
+    spinner.style.display = 'block';
+
     for(let i=0;i<datos.Search.length;i++){
+        (function (index) {
         var cloneCard=card.cloneNode(true);
         cloneCard.id=null;
         var img = cloneCard.querySelector('.containerImg img');
         var h3 = cloneCard.querySelector('h3');
-        if(datos.Search[i].Poster!='N/A'){
-            img.src=datos.Search[i].Poster
-        }else{
-            img.src='./img/alternativa.png'
-        }
+        funciona=verificarEnlaceImagen(datos.Search[i].Poster)
+        .then((funciona)=>{
+            if(funciona){
+                img.src=datos.Search[i].Poster
+            }else{
+                img.src='./img/alternativa.png'
+            }
+        })
+        .finally(()=>{
+            spinner.style.display='none';
+        })
+        
         h3.innerHTML=datos.Search[i].Title
         
         cloneCard.style.visibility='visible';
         main.appendChild(cloneCard);
+        extraerDatosPelicula(datos,datos.Search[i].imdbID)
+        .then(data=>{
+            console.log(data)
+            arrayStats['rating'].push(data.imdbRating);
+            arrayStats['id'].push(data.Title);
+            arrayStats['votes'].push(data.imdbVotes);
+            arrayStats['portada'].push(data.Poster)
+        })
+        
         cloneCard.addEventListener('click',(event)=>{
             event.stopPropagation();
             var tieneHijoConClase = main.querySelector('.containerInfo') !== null;
@@ -32,8 +66,16 @@ function imprimePeliculas(datos,card,main,cardInfo){
                     li[1].innerHTML='<b>Actores: </b>'+data.Actors;
                     li[2].innerHTML='<b>Sinopsis: </b>'+data.Plot;
                     li[3].innerHTML='<b>Año: </b>'+data.Year;
-                    imagenInfo.src=data.Poster;
-            })
+                    funciona=verificarEnlaceImagen(data.Poster)
+                    .then((funciona)=>{
+                        if(funciona){
+                            imagenInfo.src=datos.Search[i].Poster
+                        }else{
+                            imagenInfo.src='./img/alternativa.png'
+                        }
+                    })
+                    
+                })
                 main.appendChild(clonedCardInfo);
                 document.addEventListener('click',(e)=>{
                     
@@ -43,15 +85,73 @@ function imprimePeliculas(datos,card,main,cardInfo){
                 })
     
             }
-            main.appendChild(clonedCardInfo);
-            document.addEventListener('click',(e)=>{
-                
-                if (!clonedCardInfo.contains(e.target)) {
-                    clonedCardInfo.remove();
-                }
-            })
+            
         })
+    })(i);
     }
     
+    
+    
 
+}
+
+function verificarEnlaceImagen(enlace) {
+    return new Promise((resolve, reject) => {
+        var imagen = new Image();
+
+        imagen.onload = function () {
+            resolve(true);
+        };
+
+        imagen.onerror = function () {
+            resolve(false);
+        };
+
+        imagen.src = enlace;
+    });
+}
+
+function mostrarInforme(e){
+    var informeClon=document.getElementById('informeClon')
+    if(!informeClon){
+        var informe=document.querySelector('.informe');
+        var informeClon=informe.cloneNode(true);
+        informeClon.id='informeClon';
+        var main=document.querySelector('main')
+        
+        var clasificacionIMG=informeClon.querySelectorAll('.clasificacionIMG')
+        var clasificacionTittle=informeClon.querySelectorAll('.clasificacionTittle')
+        var clasificacionAmount=informeClon.querySelectorAll('.clasificacionPoints')
+
+        var votadasIMG=informeClon.querySelectorAll('.votesIMG')
+        var votadasTittle=informeClon.querySelectorAll('.votesTittle')
+        var votadasAmount=informeClon.querySelectorAll('.votesAmount')
+
+        const peliculas = arrayStats.id.map((id, index) => ({
+            id: id,
+            rating: parseFloat(arrayStats.rating[index]), // Convertir rating a número
+            portada: arrayStats.portada[index],
+            votes: parseInt(arrayStats.votes[index].replace(',', '')), // Convertir votes a número
+        }));
+
+        const peliculasFiltradas = peliculas.filter((pelicula) => !isNaN(pelicula.rating));
+        const peliculasFiltradasVotes = peliculas.filter((pelicula) => !isNaN(pelicula.votes));
+
+        var topVotos=peliculasFiltradasVotes.sort((a, b) => b.votes - a.votes).slice(0, 5);
+        var topClasificacion= peliculasFiltradas.sort((a, b) => b.rating - a.rating).slice(0, 5);
+
+        for(let i=0;i<topClasificacion.length;i++){
+            clasificacionIMG[i].src=topClasificacion[i].portada
+            clasificacionTittle[i].innerHTML=topClasificacion[i].id
+            clasificacionAmount[i].innerHTML=topClasificacion[i].rating
+            votadasIMG[i].src=topVotos[i].portada
+            votadasTittle[i].innerHTML=topVotos[i].id;
+            votadasAmount[i].innerHTML=topVotos[i].votes;
+        }
+        var botonClose=informeClon.querySelector('button');
+        botonClose.addEventListener('click',()=>{
+            informeClon.remove();
+        })
+        main.appendChild(informeClon);
+    }
 }
