@@ -28,7 +28,7 @@ window.onload=()=>{
                 datos=extraerPeliculas(datos,valorInput,contador++)
                 .then(data => {
                     datos=data;
-                    imprimePeliculas(datos,card,main,containerInfo)
+                    imprimePeliculas(datos,card,main,containerInfo,true)
                     
                   })
                   .catch(error => {
@@ -44,7 +44,7 @@ window.onload=()=>{
                           datos=extraerPeliculas(datos,valorInput,contador++)
                           .then(data => {
                             datos=data;
-                            imprimePeliculas(datos,card,main,containerInfo)  
+                            imprimePeliculas(datos,card,main,containerInfo,false)  
                           })
                           .catch(error => {
                             console.error('Error en el controlador:', error);

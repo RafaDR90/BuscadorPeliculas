@@ -5,15 +5,18 @@ var arrayStats = {
     'portada':[],
     'recaudacion':[]
   };
-function imprimePeliculas(datos,card,main,cardInfo){
+function imprimePeliculas(datos,card,main,cardInfo,reiniciar){
     var funciona;
-    arrayStats = {
-        'rating': [], 
-        'id': [],
-        'votes': [],
-        'portada':[],
-        'recaudacion':[]
-      };
+    if(reiniciar){
+        arrayStats = {
+            'rating': [], 
+            'id': [],
+            'votes': [],
+            'portada':[],
+            'recaudacion':[]
+          };
+    }
+    
     
     var spinner = document.getElementById('spinner');
     spinner.style.display = 'block';
@@ -135,7 +138,6 @@ function mostrarInforme(e){
         var recaudacionAmount=informeClon.querySelectorAll('.recaudacionPoints')
 
         
-        console.log(arrayStats)
         var peliculas=[]
         for(let i=0;i<arrayStats.id.length;i++){
             var id=arrayStats.id[i];
@@ -145,8 +147,13 @@ function mostrarInforme(e){
             }else{
                 recaudacion=0;
             }
+            if(arrayStats.votes[i]!='N/A' && arrayStats.votes[i]!=undefined){
+                var votes=parseInt(arrayStats.votes[i].replace(',', ''))
+            }else{
+                var votes=0;
+            }
             var portada=arrayStats.portada[i]
-            var votes=parseInt(arrayStats.votes[i].replace(',', ''))
+            
             peliculas.push({
                 id: id,
                 rating: rating,
