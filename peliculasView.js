@@ -2,7 +2,8 @@ var arrayStats = {
     'rating': [], 
     'id': [],
     'votes': [],
-    'portada':[]
+    'portada':[],
+    'recaudacion':[]
   };
 function imprimePeliculas(datos,card,main,cardInfo){
     var funciona;
@@ -10,7 +11,8 @@ function imprimePeliculas(datos,card,main,cardInfo){
         'rating': [], 
         'id': [],
         'votes': [],
-        'portada':[]
+        'portada':[],
+        'recaudacion':[]
       };
     
     var spinner = document.getElementById('spinner');
@@ -40,11 +42,12 @@ function imprimePeliculas(datos,card,main,cardInfo){
         main.appendChild(cloneCard);
         extraerDatosPelicula(datos,datos.Search[i].imdbID)
         .then(data=>{
-            console.log(data)
+            
             arrayStats['rating'].push(data.imdbRating);
             arrayStats['id'].push(data.Title);
             arrayStats['votes'].push(data.imdbVotes);
-            arrayStats['portada'].push(data.Poster)
+            arrayStats['portada'].push(data.Poster);
+            arrayStats['recaudacion'].push(data.BoxOffice)
         })
         
         cloneCard.addEventListener('click',(event)=>{
@@ -127,19 +130,41 @@ function mostrarInforme(e){
         var votadasTittle=informeClon.querySelectorAll('.votesTittle')
         var votadasAmount=informeClon.querySelectorAll('.votesAmount')
 
-        const peliculas = arrayStats.id.map((id, index) => ({
-            id: id,
-            rating: parseFloat(arrayStats.rating[index]), // Convertir rating a número
-            portada: arrayStats.portada[index],
-            votes: parseInt(arrayStats.votes[index].replace(',', '')), // Convertir votes a número
-        }));
+        var recaudacionIMG=informeClon.querySelectorAll('.recaudacionIMG')
+        var recaudacionTittle=informeClon.querySelectorAll('.recaudacionTittle')
+        var recaudacionAmount=informeClon.querySelectorAll('.recaudacionPoints')
+
+        
+        console.log(arrayStats)
+        var peliculas=[]
+        for(let i=0;i<arrayStats.id.length;i++){
+            var id=arrayStats.id[i];
+            var rating=parseFloat(arrayStats.rating[i])
+            if(arrayStats.recaudacion[i]!='N/A' && arrayStats.recaudacion[i]!=undefined){
+                var recaudacion=parseFloat(arrayStats.recaudacion[i].replace(/[^\d]/g, ''))
+            }else{
+                recaudacion=0;
+            }
+            var portada=arrayStats.portada[i]
+            var votes=parseInt(arrayStats.votes[i].replace(',', ''))
+            peliculas.push({
+                id: id,
+                rating: rating,
+                recaudacion: recaudacion,
+                portada: portada,
+                votes: votes,
+            })
+        }
+        console.log(peliculas)
 
         const peliculasFiltradas = peliculas.filter((pelicula) => !isNaN(pelicula.rating));
         const peliculasFiltradasVotes = peliculas.filter((pelicula) => !isNaN(pelicula.votes));
-
+        const PeliculasFiltoRecaudacion=peliculas.filter((pelicula) => !isNaN(pelicula.recaudacion));
+        
         var topVotos=peliculasFiltradasVotes.sort((a, b) => b.votes - a.votes).slice(0, 5);
         var topClasificacion= peliculasFiltradas.sort((a, b) => b.rating - a.rating).slice(0, 5);
-
+        var topRecaudacion= PeliculasFiltoRecaudacion.sort((a, b) => b.recaudacion - a.recaudacion).slice(0, 5);
+        
         for(let i=0;i<topClasificacion.length;i++){
             clasificacionIMG[i].src=topClasificacion[i].portada
             clasificacionTittle[i].innerHTML=topClasificacion[i].id
@@ -147,6 +172,13 @@ function mostrarInforme(e){
             votadasIMG[i].src=topVotos[i].portada
             votadasTittle[i].innerHTML=topVotos[i].id;
             votadasAmount[i].innerHTML=topVotos[i].votes;
+            
+            if(topRecaudacion[i].recaudacion!=0){
+                recaudacionIMG[i].src=topRecaudacion[i].portada;
+                recaudacionTittle[i].innerHTML=topRecaudacion[i].id;
+                recaudacionAmount[i].innerHTML=topRecaudacion[i].recaudacion;
+            }
+            
         }
         var botonClose=informeClon.querySelector('button');
         botonClose.addEventListener('click',()=>{
