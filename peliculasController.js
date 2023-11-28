@@ -8,23 +8,34 @@ window.onload=()=>{
     spinner.style.display='none'
     var portada=document.getElementById('portada');
     var portadaClon=portada.cloneNode(true);
-    
+    var timeoutId=null
     
     main.appendChild(portadaClon);
 
         buscar.addEventListener('keyup', function(event) {
+          window.scrollTo({
+            top: 0,
+            behavior: 'auto' 
+          });
+          
             contador=1;
             var cargando=false
             var datos;
             var valorInput = event.target.value;
+            
             var button=document.getElementById('crearInforme')
             if (valorInput.length>=3){
+              if(timeoutId){
+                clearTimeout(timeoutId);
+              }
               if(!button){
                 creaButton('crearInforme','Crear informe');
               }
               var button=document.getElementById('crearInforme')
               button.addEventListener('click',mostrarInforme);
               main.innerHTML=''
+
+              timeoutId = setTimeout(()=>{
                 datos=extraerPeliculas(datos,valorInput,contador++)
                 .then(data => {
                     datos=data;
@@ -34,6 +45,8 @@ window.onload=()=>{
                   .catch(error => {
                     console.error('Error en el controlador:', error);
                   });
+              }, 1000);
+                
                   
                     window.addEventListener('scroll', ()=>{
                       var datos;

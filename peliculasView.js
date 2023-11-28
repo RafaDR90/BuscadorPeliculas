@@ -162,7 +162,6 @@ function mostrarInforme(e){
                 votes: votes,
             })
         }
-        console.log(peliculas)
 
         const peliculasFiltradas = peliculas.filter((pelicula) => !isNaN(pelicula.rating));
         const peliculasFiltradasVotes = peliculas.filter((pelicula) => !isNaN(pelicula.votes));
@@ -172,6 +171,8 @@ function mostrarInforme(e){
         var topClasificacion= peliculasFiltradas.sort((a, b) => b.rating - a.rating).slice(0, 5);
         var topRecaudacion= PeliculasFiltoRecaudacion.sort((a, b) => b.recaudacion - a.recaudacion).slice(0, 5);
         
+        console.log(topVotos)
+
         for(let i=0;i<topClasificacion.length;i++){
             clasificacionIMG[i].src=topClasificacion[i].portada
             clasificacionTittle[i].innerHTML=topClasificacion[i].id
