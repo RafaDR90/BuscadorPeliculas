@@ -1,6 +1,6 @@
 
 function extraerPeliculas(datos,nombrePelicula,numeroPagina){
-  const apiKey = 'f471e5ce';
+  const apiKey = '44fc4d93';
   const apiUrl = 'https://www.omdbapi.com/';
 
   const fullUrl = `${apiUrl}?apikey=${apiKey}&s=${nombrePelicula}&page=${numeroPagina}`;
@@ -14,7 +14,7 @@ function extraerPeliculas(datos,nombrePelicula,numeroPagina){
 }
 
 function extraerDatosPelicula(datos,id){
-  const apiKey = 'f471e5ce';
+  const apiKey = '44fc4d93';
   const apiUrl = 'https://www.omdbapi.com/';
 
   const fullUrl = `${apiUrl}?apikey=${apiKey}&i=${id}`;
