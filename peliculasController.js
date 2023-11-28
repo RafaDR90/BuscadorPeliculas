@@ -42,7 +42,7 @@ window.onload=()=>{
                     imprimePeliculas(datos,card,main,containerInfo,true)
                     
                   })
-                  .catch(error => {
+                  .catch(error => {a
                     console.error('Error en el controlador:', error);
                   });
               }, 1000);

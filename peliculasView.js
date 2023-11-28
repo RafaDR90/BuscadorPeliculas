@@ -171,7 +171,6 @@ function mostrarInforme(e){
         var topClasificacion= peliculasFiltradas.sort((a, b) => b.rating - a.rating).slice(0, 5);
         var topRecaudacion= PeliculasFiltoRecaudacion.sort((a, b) => b.recaudacion - a.recaudacion).slice(0, 5);
         
-        console.log(topVotos)
 
         for(let i=0;i<topClasificacion.length;i++){
             clasificacionIMG[i].src=topClasificacion[i].portada
@@ -195,3 +194,4 @@ function mostrarInforme(e){
         main.appendChild(informeClon);
     }
 }
+
